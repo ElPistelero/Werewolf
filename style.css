@@ -1,0 +1,458 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --night-deep: #10142a;
+  --night-panel: #1a2040;
+  --night-panel-raised: #232a52;
+  --moon: #ede6d6;
+  --moon-dim: #b9b4ac;
+  --lantern: #e2a23b;
+  --lantern-dim: #a9793a;
+  --wolf-red: #b6473f;
+  --blood-deep: #3a0d0d;
+  --blood-mid: #6e1717;
+  --village-green: #6f9a6e;
+  --line: rgba(237, 230, 214, 0.12);
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--night-deep);
+  color: var(--moon);
+  font-family: var(--font-body);
+}
+
+button { font-family: var(--font-body); cursor: pointer; }
+input, textarea { font-family: var(--font-body); }
+
+.hidden { display: none !important; }
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  width: 100%;
+}
+.screen.active { display: block; }
+
+/* ---------- Shared UI atoms ---------- */
+
+.text-input {
+  background: var(--night-panel);
+  border: 1px solid var(--line);
+  color: var(--moon);
+  padding: 12px 14px;
+  border-radius: 3px;
+  font-size: 15px;
+  width: 100%;
+}
+.text-input:focus { outline: none; border-color: var(--lantern); }
+
+.story-textarea {
+  min-height: 90px;
+  resize: vertical;
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.btn {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-primary { background: var(--lantern); color: #241705; }
+.btn-primary:hover:not(:disabled) { background: #edb254; }
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--lantern-dim);
+  color: var(--lantern);
+}
+.btn-secondary:hover:not(:disabled) { background: rgba(226, 162, 59, 0.08); }
+
+.btn-sm { padding: 10px 16px; font-size: 14px; }
+
+.error-text { color: var(--wolf-red); font-size: 13px; min-height: 18px; margin-top: 10px; }
+.hint { color: var(--moon-dim); font-size: 13px; line-height: 1.5; }
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0 0 14px 0;
+  color: var(--moon);
+}
+.panel-title-sm { font-family: var(--font-display); font-size: 16px; margin: 0 0 10px 0; }
+
+/* ---------- Landing / Intro (red, night-of-the-wolf theme) ---------- */
+
+#screen-landing {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(182, 71, 63, 0.35), transparent 60%),
+    linear-gradient(180deg, var(--blood-deep) 0%, #180505 55%, #0c0303 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.intro-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+}
+
+.moon {
+  position: absolute;
+  top: -60px;
+  right: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff7e6, #e8c98a 70%);
+  box-shadow: 0 0 60px 10px rgba(232, 201, 138, 0.35);
+  opacity: 0.85;
+}
+
+.wolf-mark {
+  width: 140px;
+  height: 100px;
+  fill: #0c0303;
+  stroke: var(--wolf-red);
+  stroke-width: 2;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 18px rgba(182, 71, 63, 0.55));
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 4px 0 10px 0;
+  color: var(--moon);
+}
+.brand-accent { color: var(--wolf-red); font-style: italic; font-weight: 400; }
+
+.tagline { color: rgba(237, 230, 214, 0.65); font-size: 15px; margin: 0 0 34px 0; }
+
+.btn-enter {
+  padding: 16px 36px;
+  font-size: 16px;
+  background: var(--wolf-red);
+  color: #fff3ea;
+  border-radius: 3px;
+}
+.btn-enter:hover { background: #c9564c; }
+
+.path-choice { margin-top: 30px; width: 100%; max-width: 460px; }
+
+.landing-card {
+  background: rgba(26, 8, 8, 0.55);
+  border: 1px solid rgba(182, 71, 63, 0.35);
+  border-radius: 4px;
+  padding: 26px;
+  text-align: left;
+}
+
+.path-buttons { display: flex; gap: 12px; margin-bottom: 6px; }
+.path-btn { flex: 1; }
+
+.field-label { display: block; font-size: 13px; color: var(--moon-dim); margin: 16px 0 8px 0; }
+
+.code-input { text-transform: uppercase; text-align: center; letter-spacing: 0.15em; font-weight: 600; }
+
+@media (max-width: 480px) {
+  .path-buttons { flex-direction: column; }
+}
+
+/* ---------- Header shared by lobby + game ---------- */
+
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(16, 20, 42, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.room-code-display { font-size: 13px; color: var(--moon-dim); }
+.room-code-display strong { color: var(--lantern); letter-spacing: 0.1em; }
+
+.phase-pill {
+  background: var(--night-panel-raised);
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.timer-display {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--lantern);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Player lobby ---------- */
+
+.lobby-body {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+@media (max-width: 720px) { .lobby-body { grid-template-columns: 1fr; } }
+
+.player-list { list-style: none; margin: 0; padding: 0; }
+.player-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.player-list li:last-child { border-bottom: none; }
+.player-list .dead { color: var(--moon-dim); text-decoration: line-through; }
+.player-list .role-tag { font-size: 11px; color: var(--moon-dim); margin-left: auto; }
+.player-list .role-tag.werewolf { color: var(--wolf-red); }
+.player-list .role-tag.tanner { color: var(--lantern); }
+.player-list .role-tag.chupacabra { color: var(--village-green); }
+
+/* ---------- Moderator setup ---------- */
+
+.mod-lobby-body {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.mod-setup-panel, .mod-story-panel {
+  background: var(--night-panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 22px;
+}
+
+.assign-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.assign-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--night-panel-raised);
+  border-radius: 3px;
+}
+.assign-row .name { font-size: 14px; }
+.assign-row select {
+  background: var(--night-deep);
+  color: var(--moon);
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+/* ---------- Game screen (players) ---------- */
+
+.game-body {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 0;
+  height: calc(100vh - 61px);
+}
+@media (max-width: 780px) { .game-body { grid-template-columns: 1fr; height: auto; } }
+
+.roster-panel { border-right: 1px solid var(--line); padding: 20px; overflow-y: auto; }
+
+.my-role-card {
+  margin-top: 28px;
+  padding: 16px;
+  background: var(--night-panel);
+  border: 1px solid var(--lantern-dim);
+  border-radius: 4px;
+}
+.my-role-label { font-size: 11px; color: var(--moon-dim); margin-bottom: 4px; }
+.my-role-name { font-family: var(--font-display); font-size: 20px; color: var(--lantern); margin-bottom: 6px; }
+.my-role-desc { font-size: 13px; color: var(--moon-dim); line-height: 1.5; }
+.pack-mates { margin-top: 10px; font-size: 13px; color: var(--wolf-red); }
+
+.main-panel { display: flex; flex-direction: column; min-height: 0; padding: 0 24px; }
+
+.event-log {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--moon-dim);
+  line-height: 1.7;
+  max-height: 160px;
+  overflow-y: auto;
+}
+.event-log .entry { margin-bottom: 2px; }
+
+.action-panel {
+  background: var(--night-panel);
+  border: 1px solid var(--lantern-dim);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.target-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.target-btn {
+  background: var(--night-panel-raised);
+  border: 1px solid var(--line);
+  color: var(--moon);
+  padding: 8px 14px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+.target-btn:hover { border-color: var(--lantern); }
+.target-btn.selected { background: var(--lantern); color: #241705; border-color: var(--lantern); }
+
+.chat-area { flex: 1; display: flex; flex-direction: column; min-height: 0; padding: 16px 0 20px 0; }
+.chat-log { flex: 1; overflow-y: auto; font-size: 14.5px; line-height: 1.6; margin-bottom: 12px; }
+.chat-log .msg { margin-bottom: 6px; }
+.chat-log .msg .who { color: var(--lantern); font-weight: 600; margin-right: 6px; }
+.chat-log .msg.wolf .who { color: var(--wolf-red); }
+.chat-log .msg.system { color: var(--moon-dim); font-style: italic; }
+.chat-form { display: flex; gap: 8px; }
+.chat-hint { font-size: 12px; color: var(--moon-dim); margin: 6px 0 0 0; min-height: 16px; }
+
+/* ---------- Moderator in-game dashboard ---------- */
+
+.mod-game-body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  min-height: calc(100vh - 61px);
+}
+@media (max-width: 780px) { .mod-game-body { grid-template-columns: 1fr; } }
+
+.mod-announce-row { display: flex; gap: 8px; margin-top: 12px; }
+
+.mod-feed {
+  background: var(--night-panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--moon-dim);
+  max-height: 160px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+/* ---------- Mobile pass ---------- */
+
+@media (max-width: 640px) {
+  .game-header {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 12px 16px;
+  }
+  .timer-display { margin-left: 0; order: 3; }
+  #btn-mod-advance { margin-left: 0 !important; order: 4; width: 100%; }
+
+  .roster-panel { border-right: none; border-bottom: 1px solid var(--line); }
+  .main-panel { padding: 0 16px; }
+
+  .target-grid { gap: 6px; }
+  .target-btn {
+    flex: 1 1 calc(50% - 6px);
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .chat-form { flex-wrap: nowrap; }
+  .chat-form .text-input { min-width: 0; }
+
+  .assign-row { flex-direction: column; align-items: stretch; gap: 8px; }
+  .assign-row select { width: 100%; }
+
+  .lobby-body, .mod-lobby-body { padding: 24px 16px; }
+
+  .modal-card { padding: 18px; max-height: 85vh; }
+
+  .intro-wrap { max-width: 100%; }
+  .moon { width: 60px; height: 60px; top: -36px; right: -6px; }
+  .wolf-mark { width: 110px; height: 78px; }
+  .brand { font-size: 34px; }
+}
+
+/* ---------- Game over ---------- */
+
+.gameover-wrap { max-width: 560px; margin: 0 auto; padding: 18vh 24px 24px; text-align: center; }
+.gameover-title { font-family: var(--font-display); font-size: 38px; margin-bottom: 24px; }
+.gameover-roles {
+  background: var(--night-panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.gameover-roles .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; border-bottom: 1px solid var(--line); }
+.gameover-roles .row:last-child { border-bottom: none; }
+.gameover-roles .row .role.werewolf { color: var(--wolf-red); }
+.gameover-roles .row.winner { color: var(--lantern); }
+
+/* ---------- Role guide modal ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 18, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 24px;
+}
+.modal-card {
+  background: var(--night-panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.role-guide-body .role-entry { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.role-guide-body .role-entry:last-child { border-bottom: none; }
+.role-guide-body .role-name { font-family: var(--font-display); font-size: 17px; color: var(--lantern); margin-bottom: 4px; }
+.role-guide-body .role-desc { font-size: 13.5px; color: var(--moon-dim); line-height: 1.5; }
