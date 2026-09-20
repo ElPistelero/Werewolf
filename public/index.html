@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Village After Dark — Werewolf</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== SCREEN: Intro / Landing ===== -->
+  <section id="screen-landing" class="screen active">
+    <div class="intro-wrap">
+      <div class="moon"></div>
+      <svg class="wolf-mark" viewBox="0 0 200 140" aria-hidden="true">
+        <path d="M100 20 L60 70 L30 60 L45 90 L20 110 L55 108 L60 130 L85 105 L100 118 L115 105 L140 130 L145 108 L180 110 L155 90 L170 60 L140 70 Z" />
+      </svg>
+      <h1 class="brand">Village<span class="brand-accent">After</span>Dark</h1>
+      <p class="tagline">A text-only game of hidden roles, quiet lies, and a moderator who knows everything.</p>
+      <button id="btn-enter" class="btn btn-primary btn-enter">Enter the Village</button>
+    </div>
+
+    <div id="path-choice" class="path-choice hidden">
+      <div class="landing-card">
+        <div class="path-buttons">
+          <button id="btn-be-mod" class="btn btn-secondary path-btn">Host as Moderator</button>
+          <button id="btn-be-player" class="btn btn-secondary path-btn">Join as a Player</button>
+        </div>
+
+        <div id="join-fields" class="hidden">
+          <label class="field-label" for="input-name">Your name</label>
+          <input id="input-name" class="text-input" maxlength="20" placeholder="e.g. Marlowe" />
+          <label class="field-label" for="input-code">Room code</label>
+          <input id="input-code" class="text-input code-input" maxlength="4" placeholder="ROOM CODE" />
+          <button id="btn-join" class="btn btn-primary" style="margin-top:14px;">Join room</button>
+        </div>
+        <p id="landing-error" class="error-text"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN: Player Lobby ===== -->
+  <section id="screen-lobby" class="screen">
+    <header class="game-header">
+      <div class="room-code-display">Room <strong id="lobby-code">----</strong></div>
+      <div class="phase-pill" id="lobby-phase-pill">Waiting for the moderator</div>
+    </header>
+    <div class="lobby-body">
+      <div class="lobby-players">
+        <h2 class="panel-title">Players</h2>
+        <ul id="lobby-player-list" class="player-list"></ul>
+      </div>
+      <div class="lobby-info">
+        <p>The moderator is setting up the game. Roles will be assigned manually — sit tight.</p>
+        <button id="btn-open-guide-lobby" class="btn btn-secondary">View role guide</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN: Moderator Lobby / Setup ===== -->
+  <section id="screen-mod-lobby" class="screen">
+    <header class="game-header">
+      <div class="room-code-display">Room <strong id="mod-lobby-code">----</strong></div>
+      <div class="phase-pill">Moderator setup</div>
+    </header>
+
+    <div class="mod-lobby-body">
+      <div class="mod-setup-panel">
+        <h2 class="panel-title">Assign roles</h2>
+        <p class="hint">Pick a role for each player. Anyone left as Villager stays a Villager. Only one Seer, Witch, Knight, Chupacabra and Gossip are allowed; Werewolves and Tanners can be any number.</p>
+        <div id="assign-list" class="assign-list"></div>
+        <button id="btn-lock-roles" class="btn btn-primary" style="margin-top:16px;">Lock in roles</button>
+        <p id="assign-error" class="error-text"></p>
+      </div>
+
+      <div class="mod-story-panel hidden" id="mod-story-panel">
+        <h2 class="panel-title">Opening story</h2>
+        <p class="hint">Set the scene before Night 1 begins. Every player will see this text.</p>
+        <textarea id="mod-story-input" class="text-input story-textarea" placeholder="The wind howled through the village of..."></textarea>
+        <button id="btn-begin-night1" class="btn btn-primary">Send story &amp; begin Night 1</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN: Player Game ===== -->
+  <section id="screen-game" class="screen">
+    <header class="game-header">
+      <div class="room-code-display">Room <strong id="game-code">----</strong></div>
+      <div class="phase-pill" id="phase-pill">Night 1</div>
+      <div class="timer-display" id="timer-display">--:--</div>
+    </header>
+
+    <div class="game-body">
+      <aside class="roster-panel">
+        <h2 class="panel-title">Village</h2>
+        <ul id="roster-list" class="player-list"></ul>
+        <div class="my-role-card" id="my-role-card">
+          <div class="my-role-label">Your role</div>
+          <div class="my-role-name" id="my-role-name">—</div>
+          <div class="my-role-desc" id="my-role-desc"></div>
+          <div class="pack-mates" id="pack-mates"></div>
+        </div>
+        <button id="btn-open-guide-game" class="btn btn-secondary" style="margin-top:14px; width:100%;">View role guide</button>
+      </aside>
+
+      <main class="main-panel">
+        <div id="event-log" class="event-log"></div>
+
+        <div id="storywait-panel" class="action-panel hidden">
+          <p class="hint" style="margin:0;">🌒 The moderator is preparing tonight's tale. Sit tight — the story will appear here before the night begins.</p>
+        </div>
+
+        <div id="night-action-panel" class="action-panel hidden"></div>
+
+        <div id="vote-panel" class="action-panel hidden">
+          <h3 class="panel-title-sm">Cast your vote</h3>
+          <div id="vote-targets" class="target-grid"></div>
+        </div>
+
+        <div class="chat-area">
+          <div id="chat-log" class="chat-log"></div>
+          <form id="chat-form" class="chat-form">
+            <input id="chat-input" class="text-input" placeholder="Say something..." autocomplete="off" />
+            <button type="submit" class="btn btn-primary btn-sm">Send</button>
+          </form>
+          <p id="chat-hint" class="chat-hint"></p>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN: Moderator Dashboard (in-game) ===== -->
+  <section id="screen-mod-game" class="screen">
+    <header class="game-header">
+      <div class="room-code-display">Room <strong id="mod-game-code">----</strong></div>
+      <div class="phase-pill" id="mod-phase-pill">Night 1</div>
+      <div class="timer-display" id="mod-timer-display">--:--</div>
+      <button id="btn-mod-advance" class="btn btn-secondary btn-sm" style="margin-left:auto;">Skip to next phase</button>
+    </header>
+
+    <div class="mod-game-body">
+      <aside class="roster-panel">
+        <h2 class="panel-title">Everyone (full view)</h2>
+        <ul id="mod-roster-list" class="player-list"></ul>
+      </aside>
+
+      <main class="main-panel">
+        <div id="mod-story-gate" class="action-panel hidden">
+          <h3 class="panel-title-sm">Write tonight's story</h3>
+          <textarea id="mod-nightly-story-input" class="text-input story-textarea" placeholder="Describe what the village wakes up to find..."></textarea>
+          <button id="btn-send-nightly-story" class="btn btn-primary">Send story &amp; begin the night</button>
+        </div>
+
+        <div id="mod-event-log" class="event-log"></div>
+
+        <div class="mod-announce-row">
+          <input id="mod-announce-input" class="text-input" placeholder="Narrator announcement (optional, sent anytime)" />
+          <button id="btn-mod-announce" class="btn btn-secondary btn-sm">Send</button>
+        </div>
+
+        <h3 class="panel-title-sm" style="margin-top:18px;">Live action feed (moderator only)</h3>
+        <div id="mod-feed" class="mod-feed"></div>
+
+        <h3 class="panel-title-sm" style="margin-top:18px;">Wolf chat (moderator only)</h3>
+        <div id="mod-wolf-chat" class="mod-feed"></div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN: Game Over ===== -->
+  <section id="screen-gameover" class="screen">
+    <div class="gameover-wrap">
+      <h1 id="gameover-title" class="gameover-title">—</h1>
+      <div id="gameover-roles" class="gameover-roles"></div>
+      <button id="btn-play-again" class="btn btn-primary hidden">Start a new game</button>
+      <p class="hint" id="gameover-wait-hint"></p>
+    </div>
+  </section>
+
+  <!-- ===== Role Guide Modal ===== -->
+  <div id="role-guide-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="panel-title" style="margin:0;">Role guide</h2>
+        <button id="btn-close-guide" class="btn btn-secondary btn-sm">Close</button>
+      </div>
+      <div id="role-guide-body" class="role-guide-body"></div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
